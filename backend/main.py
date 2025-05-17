@@ -7,6 +7,7 @@ import logging
 # SQLAlchemy setup
 from utils.pinecone_util import upsert_documents, create_pinecone_documents
 from database import engine, Base
+from utils.database_util import save_document_chunks
 import models
 from utils.text import get_text_from_file, RecursiveTokenChunker
 from utils.embedding import VoyageEmbeddings
@@ -44,6 +45,9 @@ async def upload_document(request: UploadDocumentRequest):
 
         # create pinecone documents
         pinecone_documents = create_pinecone_documents(chunks, embeddings, request.file_ref)
+
+        # save the chunks to the database
+        save_document_chunks(request.file_ref, chunks)
 
         # upsert the embedding to pinecone
         upsert_documents(pinecone_documents)
