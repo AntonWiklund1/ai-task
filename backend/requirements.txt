@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pydantic
+pinecone
+SQLAlchemy
+python-dotenv
+psycopg2-binary
+voyageai
