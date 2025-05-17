@@ -6,3 +6,5 @@ SQLAlchemy
 python-dotenv
 psycopg2-binary
 voyageai
+google-genai
+pandas

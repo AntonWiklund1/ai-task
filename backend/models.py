@@ -22,7 +22,7 @@ class Document(Base):
     __tablename__ = 'documents'
 
     id = SAColumn(UUID(as_uuid=True), primary_key=True, server_default=text('gen_random_uuid()'))
-    file_ref = SAColumn(Text, nullable=False)
+    file_ref = SAColumn(Text, nullable=False, unique=True)
     filename = SAColumn(Text)
     uploaded_at = SAColumn(DateTime(timezone=True), server_default=func.now())
 
@@ -58,11 +58,7 @@ class Cell(Base):
     id = SAColumn(UUID(as_uuid=True), primary_key=True, server_default=text('gen_random_uuid()'))
     row_id = SAColumn(UUID(as_uuid=True), ForeignKey('rows.id', ondelete='CASCADE'), nullable=False)
     column_id = SAColumn(UUID(as_uuid=True), ForeignKey('columns.id', ondelete='CASCADE'), nullable=False)
-    answer_text = SAColumn(Text)
-    answer_date = SAColumn(Date)
-    answer_boolean = SAColumn(Boolean)
-    answer_amount = SAColumn(Numeric(18, 4))
-    answer_currency = SAColumn(CHAR(3))
+    answer = SAColumn(Text)
     computed_at = SAColumn(DateTime(timezone=True), server_default=func.now())
 
     __table_args__ = (
@@ -74,7 +70,6 @@ class Chunk(Base):
 
     id = SAColumn(UUID(as_uuid=True), primary_key=True, server_default=text('gen_random_uuid()'))
 
-    row_id      = SAColumn(UUID(as_uuid=True), ForeignKey('rows.id', ondelete='CASCADE'), nullable=False)
     document_id = SAColumn(UUID(as_uuid=True), ForeignKey('documents.id', ondelete='CASCADE'), nullable=False)
 
     chunk_index = SAColumn(Integer, nullable=False)
@@ -84,5 +79,5 @@ class Chunk(Base):
     created_at  = SAColumn(DateTime(timezone=True), server_default=func.now())
 
     __table_args__ = (
-        UniqueConstraint('row_id', 'document_id', 'chunk_index', name='uix_chunk_identity'),
+        UniqueConstraint('document_id', 'chunk_index', name='uix_chunk_identity'),
     )

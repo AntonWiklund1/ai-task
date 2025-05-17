@@ -9,7 +9,10 @@ logger.setLevel(logging.INFO)
 def get_text_from_file(file_ref: str) -> str:
     logger.info(f"getting text from file {file_ref}")
     with open(file_ref, "r") as file:
-        return file.read()  
+        content = file.read()
+        # Replace multiple newlines with a single newline
+        content = re.sub(r'\n+', '\n', content)
+        return content
     
 
 def _split_text_with_regex(
@@ -131,8 +134,8 @@ class RecursiveTokenChunker(TextSplitter):
 
     def __init__(
         self,
-        chunk_size: int = 500,
-        chunk_overlap: int = 50,
+        chunk_size: int = 800,
+        chunk_overlap: int = 0,
         separators: Optional[List[str]] = None,
         keep_separator: bool = True,
         is_separator_regex: bool = False,

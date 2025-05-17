@@ -20,17 +20,14 @@ class VoyageEmbeddings:
             logger.warning(f"Text exceeds maximum embedding length ({len(text)} > {MAX_EMBEDDING_LENGTH}). Truncating.")
             text = text[:MAX_EMBEDDING_LENGTH]
         try:
-            logger.debug(f"Making Voyage embedding API call for single text with input_type='{input_type}'")
             response = self.client.embed(text, model=self.model, input_type=input_type)
-            # Assume response.embeddings[0] is the embedding; if it has the attribute "values", use it
-            embedding = response.embeddings[0].values if hasattr(response.embeddings[0], 'values') else response.embeddings[0]
-            return embedding
+            return response.embeddings[0]
         except Exception as e:
             logger.error(f"Unexpected error: {str(e)}")
             raise
 
-    async def get_embeddings(self, texts: Union[str, List[str]], input_type: str = "document") -> List[List[float]]:
-        """Get embeddings for one or more texts asynchronously using Voyage.
+    def get_embeddings(self, texts: Union[str, List[str]], input_type: str = "document") -> List[List[float]]:
+        """Get embeddings for one or more texts synchronously using Voyage.
         
         This method now uses the batch API provided by voyageai.Client.embed.
         """
@@ -39,11 +36,10 @@ class VoyageEmbeddings:
             texts = [texts]
 
         logger.debug(f"Getting batch embeddings (Voyage) with input_type='{input_type}' for {len(texts)} texts")
-        # Use the batch API in a separate thread since it's synchronous
-        result = await asyncio.to_thread(
-            self.client.embed,
+        # Call the client embed method directly as it's now a synchronous method
+        result = self.client.embed(
             texts,
-            self.model,
+            model=self.model,
             input_type=input_type,
             truncation=True
         )
