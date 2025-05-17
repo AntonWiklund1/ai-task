@@ -46,12 +46,16 @@ GEMINI_API_KEY=your_gemini_api_key
 
 Replace `your_...` with your actual credentials and values.
 
-### 5. Run the API
+### 5. Prepare Data
+
+Create a `data` folder in the root of your project. Place all your `.txt` files that you want to use (you will later use the absolute path to these files in the API).
+
+### 6. Run the API
 
 ```bash
 python main.py
 ```
 
-### 6. Test the Application
+### 7. Test the Application
 
 You can now test the application using the demo.ipynb file.
