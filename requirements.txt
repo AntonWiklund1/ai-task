@@ -8,3 +8,4 @@ psycopg2-binary
 voyageai
 google-genai
 pandas
+ipykernel
