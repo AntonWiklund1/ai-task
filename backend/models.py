@@ -70,7 +70,6 @@ class Chunk(Base):
 
     id = SAColumn(UUID(as_uuid=True), primary_key=True, server_default=text('gen_random_uuid()'))
 
-    row_id      = SAColumn(UUID(as_uuid=True), ForeignKey('rows.id', ondelete='CASCADE'), nullable=False)
     document_id = SAColumn(UUID(as_uuid=True), ForeignKey('documents.id', ondelete='CASCADE'), nullable=False)
 
     chunk_index = SAColumn(Integer, nullable=False)
@@ -80,5 +79,5 @@ class Chunk(Base):
     created_at  = SAColumn(DateTime(timezone=True), server_default=func.now())
 
     __table_args__ = (
-        UniqueConstraint('row_id', 'document_id', 'chunk_index', name='uix_chunk_identity'),
+        UniqueConstraint('document_id', 'chunk_index', name='uix_chunk_identity'),
     )
