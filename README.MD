@@ -54,4 +54,4 @@ python main.py
 
 ### 6. Test the Application
 
-You can now test the application using the `
+You can now test the application using the demo.ipynb file.
